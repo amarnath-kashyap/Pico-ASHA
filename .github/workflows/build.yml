@@ -65,7 +65,7 @@ jobs:
               run: |
                 mkdir pico-asha/build
                 cd pico-asha/build
-                cmake -DCMAKE_BUILD_TYPE=MinSizeRel ..
+                cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DPICO_PLATFORM=rp2350 ..
 
             - name: Compile
               run: |

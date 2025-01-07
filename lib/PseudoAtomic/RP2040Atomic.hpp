@@ -6,8 +6,8 @@
  * @license Apache 2.0
  */
 
-#ifndef RP2350ATOMIC_HPP
-#define RP2350ATOMIC_HPP
+#ifndef RP2040ATOMIC_HPP
+#define RP2040ATOMIC_HPP
 
 #include <cstdint>
 #include <concepts>
