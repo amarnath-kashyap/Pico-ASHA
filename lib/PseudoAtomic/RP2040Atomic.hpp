@@ -6,8 +6,8 @@
  * @license Apache 2.0
  */
 
-#ifndef RP2040ATOMIC_HPP
-#define RP2040ATOMIC_HPP
+// #ifndef RP2040ATOMIC_HPP
+// #define RP2040ATOMIC_HPP
 
 #include <cstdint>
 #include <concepts>
@@ -126,4 +126,4 @@ namespace patom {
   } // namespace types
 } // namespace patom
 
-#endif  // RP2040ATOMIC_HPP
+// #endif  // RP2040ATOMIC_HPP
