@@ -1,17 +1,3 @@
-# == DO NEVER EDIT THE NEXT LINES for Raspberry Pi Pico VS Code Extension to work ==
-if(WIN32)
-    set(USERHOME $ENV{USERPROFILE})
-else()
-    set(USERHOME $ENV{HOME})
-endif()
-set(sdkVersion 2.0.0)
-set(toolchainVersion 13_2_Rel1)
-set(picotoolVersion 2.0.0)
-set(picoVscode ${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
-if (EXISTS ${picoVscode})
-    include(${picoVscode})
-endif()
-# ====================================================================================
 cmake_minimum_required(VERSION 3.13)
 
 SET(CMAKE_CXX_FLAGS_RELEASE "-O2")
@@ -53,10 +39,10 @@ set(ASHA_SRC
   src/main.cpp
   src/runtime_settings.cpp
   src/asha_audio.cpp
-  src/asha_bt.cpp
+  src/asha_bt_ha.cpp
   src/asha_logging.cpp
   src/asha_led.cpp
-  src/hearing_aid.cpp
+  src/pico_bt.cpp
   src/usb_descriptors.cpp
   src/usb_audio.cpp
   src/btstack_ad_dump.c
@@ -64,11 +50,11 @@ set(ASHA_SRC
   lib/g722/g722_encode.cc
 )
 
-set_source_files_properties(${ASHA_SRC} PROPERTIES COMPILE_OPTIONS "-Wall;-Wextra;-Werror")
+set_source_files_properties(${ASHA_SRC} PROPERTIES COMPILE_OPTIONS "-Wall;-Wextra;-Werror;-Wno-unused-parameter;-Wno-unused-function;-Wno-unused-variable")
 
-add_executable(pico_asha ${ASHA_SRC})
+add_executable(pico-asha ${ASHA_SRC})
 
-target_include_directories(pico_asha PUBLIC src/ lib/)
+target_include_directories(pico-asha PUBLIC src/ lib/)
 
 option(ENABLE_BLE_AD_DUMP "Enable dumping of advertisement packet data" OFF)
 option(ENABLE_UAC2_LOG "Enable USB logging" OFF)
@@ -77,8 +63,8 @@ option(ENABLE_PAIR_DEL "Delete all HA pairings" OFF)
 list(APPEND pico_asha_defines "PICO_ASHA_VERS=\"${PICO_ASHA_VERSION}\"")
 
 list(APPEND pico_asha_defines "PICO_STDIO_USB_ENABLE_RESET_VIA_BAUD_RATE=1")
-pico_enable_stdio_usb(pico_asha 1)
-pico_enable_stdio_uart(pico_asha 1)
+pico_enable_stdio_usb(pico-asha 1)
+pico_enable_stdio_uart(pico-asha 1)
 
 list(APPEND pico_asha_defines "PICO_FLASH_BANK_TOTAL_SIZE=(FLASH_SECTOR_SIZE * 8u)")
 
@@ -98,14 +84,16 @@ include(CheckCXXCompilerFlag)
 check_cxx_compiler_flag(-Wdeprecated-enum-enum-conversion HAVE_DEP_ENNUM_ENUM_CONV)
 
 if (HAVE_DEP_ENNUM_ENUM_CONV)
-    target_compile_options(pico_asha PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-Wno-deprecated-enum-enum-conversion>)
+    target_compile_options(pico-asha PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-Wno-deprecated-enum-enum-conversion>)
 endif (HAVE_DEP_ENNUM_ENUM_CONV)
 
-target_compile_definitions(pico_asha PUBLIC ${pico_asha_defines})
+target_compile_options(pico-asha PRIVATE $<$<COMPILE_LANGUAGE:CXX>:-fno-threadsafe-statics>)
 
-pico_add_extra_outputs(pico_asha)
+target_compile_definitions(pico-asha PUBLIC ${pico_asha_defines})
 
-target_link_libraries(pico_asha
+pico_add_extra_outputs(pico-asha)
+
+target_link_libraries(pico-asha
   pico_stdlib
   pico_btstack_ble
   pico_btstack_cyw43
@@ -117,4 +105,4 @@ target_link_libraries(pico_asha
   ArduinoJson
 )
 
-target_link_options(pico_asha PUBLIC -Wl,--print-memory-usage)
+target_link_options(pico-asha PUBLIC -Wl,--print-memory-usage)
