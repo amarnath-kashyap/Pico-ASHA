@@ -3,9 +3,9 @@
 
 
 // BTstack features that can be enabled
-#define ENABLE_LOG_DEBUG
-#define ENABLE_LOG_INFO
-#define ENABLE_LOG_ERROR
+// #define ENABLE_LOG_DEBUG
+// #define ENABLE_LOG_INFO
+// #define ENABLE_LOG_ERROR
 #define ENABLE_PRINTF_HEXDUMP
 
 // LE_PERIPHERAL required for extended advertising
@@ -16,6 +16,10 @@
 #define ENABLE_LE_EXTENDED_ADVERTISING
 #define ENABLE_LE_ENHANCED_CONNECTION_COMPLETE_EVENT
 #define ENABLE_L2CAP_LE_CREDIT_BASED_FLOW_CONTROL_MODE
+
+// Undocumented
+#define ENABLE_GATT_FIND_INFORMATION_FOR_CCC_DISCOVERY
+
 #define MAX_NR_GATT_CLIENTS 2
 
 // BTstack configuration. buffers, sizes, ...
