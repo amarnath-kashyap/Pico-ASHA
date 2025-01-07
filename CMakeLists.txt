@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.13)
 SET(CMAKE_CXX_FLAGS_RELEASE "-O2")
 SET(CMAKE_C_FLAGS_RELEASE "-O2")
 
-set(PICO_BOARD pico_w)
+
 include(pico_sdk_import.cmake)
 
 project(pico_asha C CXX)
