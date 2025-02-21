@@ -5,7 +5,7 @@ on:
     pull_request:
 
 env:
-    PICO_SDK_COMMIT_HASH: efe2103f9b28458a1615ff096054479743ade236
+    PICO_SDK_COMMIT_HASH: 95ea6acad131124694cda1c162c52cd30e0aece0
     BTSTACK_CREDITS_COMMIT_HASH: fa5389268014cd3572e84d70ff58c2f79f4b56cf
 
 jobs:
@@ -65,7 +65,7 @@ jobs:
               run: |
                 mkdir pico-asha/build
                 cd pico-asha/build
-                cmake -DCMAKE_BUILD_TYPE=MinSizeRel ..
+                cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DPICO_PLATFORM=rp2350 ..
 
             - name: Compile
               run: |
