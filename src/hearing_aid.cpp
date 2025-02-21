@@ -427,6 +427,11 @@ void HearingAid::handle_sm(PACKET_HANDLER_PARAMS)
                     break;
             }
             break;
+        case SM_EVENT_IDENTITY_RESOLVING_STARTED:
+        case SM_EVENT_IDENTITY_RESOLVING_FAILED:
+        case SM_EVENT_IDENTITY_RESOLVING_SUCCEEDED:
+        case SM_EVENT_IDENTITY_CREATED:
+            break;
         default:
             LOG_ERROR("Unhandled SM event: 0x%02x", ev_type);
             break;
@@ -671,12 +676,10 @@ void HearingAid::handle_acp_write(PACKET_HANDLER_PARAMS)
             LOG_ERROR("%s: ACP write failed with status: %s", ha->get_side_str(), att_err_str(att_status));
             ha->audio_state = AudioState::Ready;
         } else {
-            // If stopping, don't wait for the notification, some HA's might not send it
             if (ha->audio_state == AudioState::Stop) {
                 if (ha->other && ha->other->is_streaming()) {
                     ha->other->send_acp_status(ACPStatus::other_disconnected);
                 }
-                ha->audio_state = AudioState::Ready;
             }
         }
     }
@@ -763,6 +766,9 @@ void HearingAid::handle_gatt_notification(PACKET_HANDLER_PARAMS)
                         if (ha->other && ha->other->is_streaming()) {
                             ha->other->send_acp_status(ACPStatus::other_connected);
                         }
+                    } else if (ha->audio_state == AudioState::Stop) {
+                        LOG_INFO("%s: Audio stop OK", ha->get_side_str());
+                        ha->audio_state = AudioState::Ready;
                     }
                     break;
                 case ASPStatus::unkown_command:
